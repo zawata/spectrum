@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^2",
+    "@tauri-apps/plugin-http": "^2.0.1",
     "@tauri-apps/plugin-shell": "^2",
     "classnames": "^2.5.1",
     "framer-motion": "^11.11.17",
@@ -26,7 +27,7 @@
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.15",
-    "typescript": "^5.2.2",
+    "typescript": "^5.7.2",
     "vite": "^5.3.1"
   }
 }

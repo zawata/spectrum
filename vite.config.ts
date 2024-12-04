@@ -5,6 +5,12 @@ const host = process.env.TAURI_DEV_HOST;
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
+  build: {
+    target: "es2020",
+  },
+  esbuild: {
+    target: "es2020",
+  },
   plugins: [react()],
   // prevent vite from obscuring rust errors
   clearScreen: false,
