@@ -15,6 +15,9 @@
           "url": "https://clients3.google.com"
         }
       ]
-    }
+    },
+    "fs:default",
+    "os:default",
+    "log:default"
   ]
 }
