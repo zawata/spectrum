@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import { type MotionValue, motion, useMotionValueEvent, useSpring, useTransform } from "motion";
+import { type MotionValue, motion, useMotionValueEvent, useSpring, useTransform } from "motion/react";
 import React from "react";
 
 type CarouselItemProps = {
