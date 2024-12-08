@@ -1,6 +1,7 @@
 import React from "react";
 import Carousel from "./components/AppCarousel/Carousel";
 import { useService } from "./hooks/ServiceProvider";
+import { SlideshowService } from "./services/Slideshow/SlideshowService";
 import { TopicService } from "./services/TopicService";
 
 const ICON_WIDTH = 200;
@@ -40,7 +41,9 @@ export type AppItemConfig = {
 };
 
 export default function App() {
-  const topicService = useService(TopicService);
+  const slideshowService = useService(SlideshowService);
+
+  console.log(slideshowService.getNextImage());
 
   // const chromecastIframe = (
   //   <iframe className="w-full h-full" src="https://clients3.google.com/cast/chromecast/home" title="Chromecast" />
