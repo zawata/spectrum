@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  type ServiceBase,
-  type ServiceContextDescriptor,
-  type ServiceInitializationContext,
-  ServiceManager,
-} from "../services/ServiceManager";
+import { ServiceManager } from "../services/ServiceManager";
 
 const ServiceContext = React.createContext<ServiceManager>(ServiceManager.getInstance());
 
@@ -15,12 +10,7 @@ export const ServiceContextProvider = ({ children, serviceManager }: ServiceCont
   return <ServiceContext.Provider value={serviceManager}>{children}</ServiceContext.Provider>;
 };
 
-export const useService = <
-  TClassServiceContextDescriptor extends ServiceContextDescriptor,
-  TClass extends ServiceBase<TClassServiceContextDescriptor>,
->(
-  t: new (context: ServiceInitializationContext<TClassServiceContextDescriptor>) => TClass,
-): TClass => {
+export const useService = <TClass extends object>(t: new (serviceManager: ServiceManager) => TClass): TClass => {
   const serviceProvider = React.useContext(ServiceContext);
   return serviceProvider.getService(t);
 };
