@@ -1,5 +1,7 @@
 import React from "react";
-import Carousel from "./components/NewCarousel";
+import Carousel from "./components/AppCarousel/Carousel";
+import { useService } from "./hooks/ServiceProvider";
+import { TopicService } from "./services/TopicService";
 
 const ICON_WIDTH = 200;
 const HIDE_TIMEOUT = 5000;
@@ -38,13 +40,11 @@ export type AppItemConfig = {
 };
 
 export default function App() {
-  const chromecastIframe = (
-    <iframe
-      className="w-full h-full"
-      src="https://clients3.google.com/cast/chromecast/home"
-      title="Chromecast"
-    />
-  );
+  const topicService = useService(TopicService);
+
+  // const chromecastIframe = (
+  //   <iframe className="w-full h-full" src="https://clients3.google.com/cast/chromecast/home" title="Chromecast" />
+  // );
 
   const [isOverlayHidden, setOverlayHidden] = React.useState(true);
   const timer = React.useRef<NodeJS.Timeout>();
@@ -78,16 +78,8 @@ export default function App() {
         <Carousel
           itemWidth={ICON_WIDTH}
           items={testItems.map((item) => (
-            <div
-              key={item.name}
-              className="w-full h-full flex flex-col items-center justify-center"
-            >
-              <img
-                src={item.path}
-                alt={item.name}
-                className="w-full h-full"
-                onDragStart={(e) => e.preventDefault()}
-              />
+            <div key={item.name} className="w-full h-full flex flex-col items-center justify-center">
+              <img src={item.path} alt={item.name} className="w-full h-full" onDragStart={(e) => e.preventDefault()} />
               <span>{item.name}</span>
             </div>
           ))}
@@ -101,7 +93,7 @@ export default function App() {
 
   return (
     <div className="container">
-      <div className="absolute w-full h-full">{chromecastIframe}</div>
+      {/* <div className="absolute w-full h-full">{chromecastIframe}</div> */}
       {appOverlay}
     </div>
   );

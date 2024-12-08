@@ -1,11 +1,5 @@
 import classNames from "classnames";
-import {
-  type MotionValue,
-  motion,
-  useMotionValueEvent,
-  useSpring,
-  useTransform,
-} from "framer-motion";
+import { type MotionValue, motion, useMotionValueEvent, useSpring, useTransform } from "motion";
 import React from "react";
 
 type CarouselItemProps = {
@@ -15,27 +9,13 @@ type CarouselItemProps = {
   virtualScrollLeft: MotionValue<number>;
 };
 
-function CarouselItem({
-  actualItem,
-  itemWidth,
-  virtualIndex,
-  virtualScrollLeft,
-}: CarouselItemProps) {
-  console.log("CI", virtualIndex);
-  const translationOffset = useTransform(
-    virtualScrollLeft,
-    (virtualScrollLeft) => {
-      // const partialItemScrollOffset = virtualScrollLeft % itemWidth;
-      const itemOffset = itemWidth * virtualIndex;
+function CarouselItem({ actualItem, itemWidth, virtualIndex, virtualScrollLeft }: CarouselItemProps) {
+  const translationOffset = useTransform(virtualScrollLeft, (virtualScrollLeft) => {
+    const itemOffset = itemWidth * virtualIndex;
+    return itemOffset - virtualScrollLeft;
+  });
 
-      return itemOffset - virtualScrollLeft;
-    },
-  );
-
-  const classnames = classNames(
-    "absolute top-0 left-0",
-    "flex flex-col items-center justify-center border-2",
-  );
+  const classnames = classNames("absolute top-0 left-0", "flex flex-col items-center justify-center border-2");
 
   return (
     <motion.div
@@ -62,26 +42,18 @@ type Props = {
   selectedIndex?: number;
 };
 
-export default function Carousel({
-  className,
-  itemWidth,
-  items,
-  onItemSelect,
-  selectedIndex,
-}: Props) {
+export default function Carousel({ className, itemWidth, items, onItemSelect, selectedIndex }: Props) {
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
   const getContainerWidth = () => scrollContainerRef.current?.clientWidth ?? 0;
   const calcScrollLeft = (index: number): number => {
     const itemScrollOffset = index * itemWidth;
     const middleOfContainer = getContainerWidth() / 2;
     const middleOfItem = itemWidth / 2;
-    console.log("calc", itemScrollOffset, middleOfContainer, middleOfItem);
     return itemScrollOffset + middleOfItem - middleOfContainer;
   };
 
   const [virtualIndex, setVirtualIndex] = React.useState(selectedIndex ?? 0);
   const updateVirtualIndex = (index: number, jump = false) => {
-    console.log("updateVirtualIndex", index);
     if (jump) {
       virtualScrollLeft.jump(calcScrollLeft(index));
     } else {
@@ -95,9 +67,7 @@ export default function Carousel({
     stiffness: 300,
     damping: 30,
   });
-  useMotionValueEvent(virtualScrollLeft, "change", () => {
-    // console.log('vchange', virtualScrollLeft.get());
-  });
+  useMotionValueEvent(virtualScrollLeft, "change", () => {});
 
   const overScanIndexCount = 3;
 
@@ -105,10 +75,7 @@ export default function Carousel({
     return Math.floor(virtualScrollLeft.get() / itemWidth) - overScanIndexCount;
   };
   const getLastOverScanIndex = () => {
-    return (
-      Math.floor((virtualScrollLeft.get() + getContainerWidth()) / itemWidth) +
-      overScanIndexCount
-    );
+    return Math.floor((virtualScrollLeft.get() + getContainerWidth()) / itemWidth) + overScanIndexCount;
   };
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -144,14 +111,12 @@ export default function Carousel({
 
   type CarouselItemsByVirtualIndex = Record<number, React.ReactNode>;
 
-  const recalculateCarouselItems = (force = false) => {
+  function recalculateCarouselItems(force = false) {
     const firstOverScanIndex = getFirstOverScanIndex();
     const lastOverScanIndex = getLastOverScanIndex();
     const newCarouselItems: CarouselItemsByVirtualIndex = {};
     for (let i = firstOverScanIndex; i <= lastOverScanIndex; i++) {
-      const renderIndex = i - firstOverScanIndex - overScanIndexCount - 1;
       if (!carouselItems[i] || force) {
-        console.log("render", i, renderIndex);
         newCarouselItems[i] = renderItem(i);
       } else {
         newCarouselItems[i] = carouselItems[i];
@@ -159,13 +124,10 @@ export default function Carousel({
     }
 
     setCarouselItems(newCarouselItems);
-  };
+  }
 
-  const [carouselItems, setCarouselItems] = React.useState<
-    Record<number, React.ReactNode>
-  >([]);
+  const [carouselItems, setCarouselItems] = React.useState<Record<number, React.ReactNode>>([]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   React.useEffect(() => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.focus();
@@ -174,18 +136,13 @@ export default function Carousel({
     }
   }, [scrollContainerRef]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   React.useEffect(() => {
     recalculateCarouselItems();
   }, [virtualIndex]);
 
   return (
     <div className={classNames("relative w-full", className)}>
-      <div
-        className="overflow-hidden w-full focus:outline-none"
-        ref={scrollContainerRef}
-        onKeyDown={handleKeyDown}
-      >
+      <div className="overflow-hidden w-full focus:outline-none" ref={scrollContainerRef} onKeyDown={handleKeyDown}>
         <motion.div className="flex cursor-grab active:cursor-grabbing">
           {Object.keys(carouselItems).map((key) => carouselItems[Number(key)])}
         </motion.div>
