@@ -1,7 +1,6 @@
 import { fetch } from "@tauri-apps/plugin-http";
 import * as log from "@tauri-apps/plugin-log";
 import { uuid } from "../../utils/uuid";
-import type { ServiceManager } from "../ServiceManager";
 import type {
   ISlideshowImage,
   ISlideshowProvider,
@@ -49,6 +48,7 @@ type RawTopicConfig = [
 export class GoogleSlideshowImage implements ISlideshowImage {
   imageUrl: string;
   author: string;
+  title: undefined;
 
   constructor(init: {
     imageUrl: string;
@@ -117,7 +117,7 @@ export class GoogleSlideshowProvider implements ISlideshowProvider<SlideshowProv
       _4,
       _5, // something to do with fetching the weather
       _6, // || 0
-      _7, // \\ ''
+      _7, // || ''
       _8,
       _9, // emit "settingUpdated"
       _10, // emit "weatherInfoUpdated"

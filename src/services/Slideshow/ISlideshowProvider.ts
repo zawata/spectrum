@@ -1,6 +1,7 @@
 export interface ISlideshowImage {
   imageUrl: string;
   author: string;
+  title: string | undefined;
 }
 
 export enum SlideshowProvider {

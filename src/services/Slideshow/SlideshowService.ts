@@ -3,8 +3,13 @@ import { ServiceManager } from "../ServiceManager";
 
 import * as log from "@tauri-apps/plugin-log";
 import _ from "lodash";
-import { GoogleSlideshowProvider } from "./GoogleSlideshow";
+
 import { type ISlideshowImage, type ISlideshowProvider, SlideshowProvider } from "./ISlideshowProvider";
+
+import { GoogleSlideshowProvider } from "./GoogleSlideshow";
+import { StaticSlideshowProvider } from "./StaticSlideshow";
+import { NasaSlideshowProvider } from "./NasaSlideshow";
+import { UnsplashSlideshowProvider } from "./UnsplashSlideshow";
 
 type ImageAndProvider = {
   provider: SlideshowProvider;
@@ -35,13 +40,13 @@ export class SlideshowService {
           this.configuredProviders[SlideshowProvider.Google] = new GoogleSlideshowProvider();
           break;
         case SlideshowProvider.Static:
-          this.configuredProviders[SlideshowProvider.Static] = new GoogleSlideshowProvider();
+          this.configuredProviders[SlideshowProvider.Static] = new StaticSlideshowProvider();
           break;
         case SlideshowProvider.Nasa:
-          this.configuredProviders[SlideshowProvider.Nasa] = new GoogleSlideshowProvider();
+          this.configuredProviders[SlideshowProvider.Nasa] = new NasaSlideshowProvider();
           break;
         case SlideshowProvider.Unsplash:
-          this.configuredProviders[SlideshowProvider.Unsplash] = new GoogleSlideshowProvider();
+          this.configuredProviders[SlideshowProvider.Unsplash] = new UnsplashSlideshowProvider();
           break;
         default:
           continue;

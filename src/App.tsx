@@ -2,7 +2,6 @@ import React from "react";
 import Carousel from "./components/AppCarousel/Carousel";
 import { useService } from "./hooks/ServiceProvider";
 import { SlideshowService } from "./services/Slideshow/SlideshowService";
-import { TopicService } from "./services/TopicService";
 
 const ICON_WIDTH = 200;
 const HIDE_TIMEOUT = 5000;
@@ -50,7 +49,7 @@ export default function App() {
   // );
 
   const [isOverlayHidden, setOverlayHidden] = React.useState(true);
-  const timer = React.useRef<NodeJS.Timeout>();
+  const timer = React.useRef<NodeJS.Timeout>(undefined);
 
   React.useEffect(() => {
     if (!isOverlayHidden) {

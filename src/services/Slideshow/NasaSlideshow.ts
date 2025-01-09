@@ -1,30 +1,42 @@
 import { fetch } from "@tauri-apps/plugin-http";
 import * as log from "@tauri-apps/plugin-log";
 
-import type { ISlideshowProvider, SlideshowProvider, SlideshowProviderConfig } from "./ISlideshowProvider";
+import type { ISlideshowImage, ISlideshowProvider, SlideshowProvider, SlideshowProviderConfig } from "./ISlideshowProvider";
 
-export type RawTopicConfig = {
+export type RawImageConfig = {
   url: string;
+  hdurl: string;
+  title: string;
+  explanation: string;
+  media_type: string;
+  service_version: string;
+  copyright: string;
 };
 
-export class NasaSlideshowImage {
+export class NasaSlideshowImage implements ISlideshowImage {
   imageUrl: string;
-  author: "NASA";
+  author: string;
+  title: string | undefined;
 
   constructor(init: {
     imageUrl: string;
+    author: string;
+    title: string | undefined;
   }) {
     this.imageUrl = init.imageUrl;
-    this.author = "NASA";
+    this.author = init.author;
+    this.title = init.title;
   }
 
-  static fromRawTopic(_rawTopic: RawTopicConfig) {
-    console.log(_rawTopic);
+  static fromRawImageConfig(_rawImageConfig: RawImageConfig) {
+    console.log(_rawImageConfig);
 
-    const { url } = _rawTopic;
+    const { url, hdurl, copyright, title } = _rawImageConfig;
 
     return new NasaSlideshowImage({
-      imageUrl: url,
+      imageUrl: hdurl ?? url,
+      author: copyright,
+      title: title ?? undefined,
     });
   }
 }
@@ -47,6 +59,6 @@ export class NasaSlideshowProvider implements ISlideshowProvider<SlideshowProvid
 
     const body = await response.json();
 
-    return [...body.map((rawTopic: RawTopicConfig) => NasaSlideshowImage.fromRawTopic(rawTopic))];
+    return [...body.map((rawTopic: RawImageConfig) => NasaSlideshowImage.fromRawImageConfig(rawTopic))];
   }
 }
